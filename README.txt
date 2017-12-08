@@ -6,3 +6,4 @@ O jogo começa com uma velocidade, mas ao completar-lo você irá para uma segunda,
 PAra iniciar o jogo, pressione ou a tecla esquerda ou a direita.
 O gráfico foi feito utilizando Graphics e Graphics2D, então visualmente é bem simples.
 O jogo tem três classes: a Main, que irá construir a janela do jogo, a Gameplay, onde o jogo será construido e irá funcionar, e a MapGenerator, que irá gerar os tijolos que irão aparecer no jogo.
+Na classe Gameplay, desenhamos os objetos do jogo, além de criar a plataforma e as bordas. Para a bola, ela irá inverter a direção caso chegue a um dos extremos de X e Y, na plataforma controlada pelo jogador, ou em um tijolo, assim "quicando".
