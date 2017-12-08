@@ -15,28 +15,35 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+@SuppressWarnings("serial")
 public class Gameplay extends JPanel implements KeyListener, ActionListener{
+	//verificação se o jogo começou e se o jogador ganhou a ultima rodada
 	private boolean play = false;
 	private boolean win = false;
+	
 	private int score = 0;
 	private BufferedImage img;
-	private BufferedImage platform;
 	
 	private int totalBricks = 21;
 	
+	//temporalizador
 	private Timer timer;
 	private int delay = 8;
 	
+	//posicão da plataforma
 	private int playerX = 310;
 	
+	//posição e direção da bola
 	private int ballposX = 120;
 	private int ballposY = 350;
 	private int ballXdir = -2;
 	private int ballYdir = -3;
 	
+	//Gerador dos tijolos
 	private MapGenerator map;
 	
 	public Gameplay() {
+		//deixa o jogo pronto para ser iniciado, mover para a direita ou a esquerda que irá iniciar o jogo(KeyListener)
 		map = new MapGenerator(3, 7);
 		addKeyListener(this);
 		setFocusable(true);
@@ -45,8 +52,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		timer.start();
 	}
 	
+	//desenha os elementos
 	public void paint(Graphics g){
-		//bg
+		//fundo
 		URL res = getClass().getResource("./galaxy.png");
 		try {
 			img = ImageIO.read( res );
@@ -57,27 +65,29 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		g.clearRect(0, 0, getWidth(), getHeight() );
 		g.drawImage(img, 1, 1, 692, 592, null);
 		
-		//g.setColor(Color.black);
-		//g.fillRect(1, 1, 692, 592);
 		//desenhar o mapa
 		map.draw((Graphics2D)g);
+		
 		//borda
 		g.setColor(Color.black);
 		g.fillRect(0, 0, 3, 592);
 		g.fillRect(0, 0, 692, 3);
 		g.fillRect(691, 0, 3, 592);
+		
 		//pontuação
 		g.setColor(Color.white);
 		g.setFont(new Font("serif", Font.BOLD, 25));
 		g.drawString(""+score, 590, 25);
-		//a plataforma que você controla
 		
+		//a plataforma que você controla
 		g.setColor(Color.magenta);
 		g.fillRect(playerX, 550, 100, 8);
+		
 		//bola
 		g.setColor(Color.white);
 		g.fillOval(ballposX, ballposY, 20, 20);
 		
+		//condicional para a vitória, ter destruido todos os tijolos, pode reiniciar o jogo mais dificil
 		if (totalBricks == 0){
 			play = false;
 			win = true;
@@ -85,12 +95,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			ballYdir = 0;
 			g.setColor(Color.RED);
 			g.setFont(new Font("serif", Font.BOLD, 30));
-			g.drawString("Você venceu, pontuação: ", 190, 300);
+			g.drawString("Você venceu! pontuação: " + score, 190, 300);
 			
 			g.setFont(new Font("serif", Font.BOLD, 20));
 			g.drawString("Pressione enter para reiniciar", 230, 350);
 		}
 		
+		//condicional de derrota, ter deixado a bola ir para fora. Reinicia o jogo na dificuldade inicial.
 		if(ballposY > 570){
 			play = false;
 			win = false;
@@ -98,7 +109,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			ballYdir = 0;
 			g.setColor(Color.RED);
 			g.setFont(new Font("serif", Font.BOLD, 30));
-			g.drawString("Fim de jogo, pontuação: ", 190, 300);
+			g.drawString("Fim de jogo, pontuação: " + score, 190, 300);
 			
 			g.setFont(new Font("serif", Font.BOLD, 20));
 			g.drawString("Pressione enter para reiniciar", 230, 350);
@@ -116,24 +127,24 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 				ballYdir = -ballYdir;
 			}
 			
-			//obs: o primeiro map se refere ao map dessa classe, o segundo a variavel da classe Mapgenerator
+			//colisão da bola e dos tijolos, além da "destruição" dos tijolos
+			//obs: o primeiro map se refere ao map desta classe, o segundo a variavel da classe Mapgenerator
 			 for(int i = 0; i<map.map.length; i++){
 				for (int j = 0; j<map.map[0].length; j++){
 					if(map.map[i][j] > 0){
-						int brickX = j * map.brickWidth + 80;
-						int brickY = i * map.brickHeight + 50;
-						int brickWidth = map.brickWidth;
-						int brickHeight = map.brickHeight;
 						
-						Rectangle rect = new Rectangle(brickX, brickY, brickWidth, brickHeight);
+						Rectangle rect = new Rectangle(j * map.brickWidth + 80, i * map.brickHeight + 50,
+								map.brickWidth, map.brickHeight);
 						Rectangle ballRect = new Rectangle(ballposX, ballposY, 20, 20);
 						Rectangle brickRect = rect;
 						
+						//quando um tijolo é acertado, o valor dele muda para zero, assim sendo "destruido"
 						if(ballRect.intersects(brickRect)){
 							map.setBrickValue(0, i, j);
 							totalBricks--;
 							score += 5;
 							
+							//faz a bola "quicar" ao tocar um tijolo
 							if(ballposX + 19 <= brickRect.x || ballposX + 1 >= brickRect.x + brickRect.width){
 								ballXdir = -ballXdir;
 							} else {
@@ -148,6 +159,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 				}
 			}
 			
+			 //faz a bola quicar ao chegar em uma das bordas
 			ballposX += ballXdir;
 			ballposY += ballYdir;
 			if(ballposX < 0){
@@ -167,6 +179,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		//recebe as teclas que o usuário digirar
+		
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT){
 			if(playerX >= 600){
 				playerX = 600;
@@ -182,6 +196,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			}
 		}
 		
+		//reinicia o jogo apenas se olay for false
 		if(e.getKeyCode() == KeyEvent.VK_ENTER){
 			if(!play){
 				if (win){
@@ -192,7 +207,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 					ballYdir--;
 					playerX = 310;
 					score = 0;
-					totalBricks = 35;
+					totalBricks = 28;
 					map = new MapGenerator(4, 7);
 				}else {
 				play = true;
@@ -210,14 +225,16 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		}
 	}
 	
-	
+	//moveRight e moveLeft movimentam o jogador, se o jogo ainda não estiver rodando, irá rodar
 	public void moveRight(){
-		play = true;
+		if (!play)
+			play = true;
 		playerX += 20;
 	}
 	
 	public void moveLeft(){
-		play = true;
+		if (!play)
+			play = true;
 		playerX -= 20;
 	}
 
