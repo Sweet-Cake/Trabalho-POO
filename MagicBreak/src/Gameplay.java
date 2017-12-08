@@ -21,7 +21,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	private boolean play = false;
 	private boolean win = false;
 	
+	private int hScore = 0;
 	private int score = 0;
+	
 	private BufferedImage img;
 	
 	private int totalBricks = 21;
@@ -65,7 +67,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		g.clearRect(0, 0, getWidth(), getHeight() );
 		g.drawImage(img, 1, 1, 692, 592, null);
 		
-		//desenhar o mapa
+		//desenhar o mapa dos tijolos, chamando o draw da MapGenerator
 		map.draw((Graphics2D)g);
 		
 		//borda
@@ -78,6 +80,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		g.setColor(Color.white);
 		g.setFont(new Font("serif", Font.BOLD, 25));
 		g.drawString(""+score, 590, 25);
+		
+		//pontuação maxima
+		g.setColor(Color.white);
+		g.setFont(new Font("serif", Font.BOLD, 25));
+		g.drawString("high score: "+hScore, 50, 25);
 		
 		//a plataforma que você controla
 		g.setColor(Color.magenta);
@@ -99,6 +106,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			
 			g.setFont(new Font("serif", Font.BOLD, 20));
 			g.drawString("Pressione enter para reiniciar", 230, 350);
+			g.dispose();
 		}
 		
 		//condicional de derrota, ter deixado a bola ir para fora. Reinicia o jogo na dificuldade inicial.
@@ -111,8 +119,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			g.setFont(new Font("serif", Font.BOLD, 30));
 			g.drawString("Fim de jogo, pontuação: " + score, 190, 300);
 			
+			if (score > hScore){
+				g.setColor(Color.RED);
+				g.setFont(new Font("serif", Font.BOLD, 30));
+				g.drawString("***NOVO HIGH SCORE***", 190, 250);
+			}
+			
 			g.setFont(new Font("serif", Font.BOLD, 20));
 			g.drawString("Pressione enter para reiniciar", 230, 350);
+			g.dispose();
 		}
 		
 		g.dispose();
@@ -196,36 +211,41 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 			}
 		}
 		
-		//reinicia o jogo apenas se olay for false
+		//reinicia o jogo apenas se play for false
 		if(e.getKeyCode() == KeyEvent.VK_ENTER){
 			if(!play){
+				
 				if (win){
 					play = true;
 					ballposX = 120;
 					ballposY = 350;
-					ballXdir--;
-					ballYdir--;
+					ballXdir=-3;
+					ballYdir=-4;
+					System.out.println(ballXdir);
+					playerX = 310;
+					//score = 0;
+					totalBricks = 21;
+					map = new MapGenerator(3, 7);
+				}else {
+					if (score > hScore)
+							hScore = score;
+					play = true;
+					ballposX = 120;
+					ballposY = 350;
+					ballXdir = -2;
+					ballYdir = -3;
 					playerX = 310;
 					score = 0;
-					totalBricks = 28;
-					map = new MapGenerator(4, 7);
-				}else {
-				play = true;
-				ballposX = 120;
-				ballposY = 350;
-				ballXdir = -1;
-				ballYdir = -2;
-				playerX = 310;
-				score = 0;
-				totalBricks = 21;
-				map = new MapGenerator(3, 7);
-				}
-				repaint();
+					totalBricks = 21;
+					map = new MapGenerator(3, 7);
+					}
+					repaint();
 			}
 		}
 	}
 	
 	//moveRight e moveLeft movimentam o jogador, se o jogo ainda não estiver rodando, irá rodar
+	//você pode segurar as setas  também caso precise andar de um extremo para outro
 	public void moveRight(){
 		if (!play)
 			play = true;
