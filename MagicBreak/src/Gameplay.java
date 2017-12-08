@@ -7,8 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
-
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -16,6 +19,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	private boolean play = false;
 	private boolean win = false;
 	private int score = 0;
+	private BufferedImage img;
 	
 	private int totalBricks = 21;
 	
@@ -26,8 +30,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	
 	private int ballposX = 120;
 	private int ballposY = 350;
-	private int ballXdir = -1;
-	private int ballYdir = -2;
+	private int ballXdir = -2;
+	private int ballYdir = -3;
 	
 	private MapGenerator map;
 	
@@ -42,8 +46,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	
 	public void paint(Graphics g){
 		//bg
-		g.setColor(Color.black);
-		g.fillRect(1, 1, 692, 592);
+		URL res = getClass().getResource("./galaxy.png");
+		try {
+			img = ImageIO.read( res );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		g.clearRect(0, 0, getWidth(), getHeight() );
+		g.drawImage(img, 1, 1, 692, 592, null);
+		
+		//g.setColor(Color.black);
+		//g.fillRect(1, 1, 692, 592);
 		//desenhar o mapa
 		map.draw((Graphics2D)g);
 		//borda
@@ -172,12 +186,12 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 					play = true;
 					ballposX = 120;
 					ballposY = 350;
-					ballXdir = -2;
-					ballYdir = -3;
+					ballXdir--;
+					ballYdir--;
 					playerX = 310;
 					score = 0;
 					totalBricks = 35;
-					map = new MapGenerator(5, 7);
+					map = new MapGenerator(4, 7);
 				}else {
 				play = true;
 				ballposX = 120;
