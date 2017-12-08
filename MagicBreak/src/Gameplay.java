@@ -20,6 +20,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	private boolean win = false;
 	private int score = 0;
 	private BufferedImage img;
+	private BufferedImage platform;
 	
 	private int totalBricks = 21;
 	
@@ -61,7 +62,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		//desenhar o mapa
 		map.draw((Graphics2D)g);
 		//borda
-		g.setColor(Color.yellow);
+		g.setColor(Color.black);
 		g.fillRect(0, 0, 3, 592);
 		g.fillRect(0, 0, 692, 3);
 		g.fillRect(691, 0, 3, 592);
@@ -70,10 +71,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		g.setFont(new Font("serif", Font.BOLD, 25));
 		g.drawString(""+score, 590, 25);
 		//a plataforma que você controla
-		g.setColor(Color.green);
+		
+		g.setColor(Color.magenta);
 		g.fillRect(playerX, 550, 100, 8);
 		//bola
-		g.setColor(Color.yellow);
+		g.setColor(Color.white);
 		g.fillOval(ballposX, ballposY, 20, 20);
 		
 		if (totalBricks == 0){
