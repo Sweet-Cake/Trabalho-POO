@@ -11,6 +11,5 @@ O jogo tem três classes: a Main, que irá construir a janela do jogo, a Gamepla
 Na classe Gameplay, desenhamos os objetos do jogo, além de criar a plataforma e as bordas. Para a bola, ela irá inverter a direção caso chegue a um dos extremos de X e Y, na plataforma controlada pelo jogador, ou em um tijolo, assim "quicando".
 Você precisa importar o projeto no eclipse.
 Para importar, abra o eclipse, File>Import>General>Projects from Folder or Archive
-Ou arraste a pasta scr para um projeto existente(ou criado na hora)
-Caso prefira, também é possivel arrastar as três classes para 
+Ou arraste o conteudo da pasta scr(os packages controller e view) para um projeto existente(ou criado na hora)
 Obs: Você pode segurar a tecla do teclado caso queira ir de um lado a outro, sem necessidade de apertar direita ou esquerda toda vez até chegar lá.
