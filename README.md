@@ -10,7 +10,7 @@ O jogo começa com uma velocidade, mas ao completar-lo você irá para uma segun
 
 PAra iniciar o jogo, pressione ou a tecla esquerda ou a direita.
 
-O gráfico foi feito utilizando Graphics e Graphics2D, então visualmente é bem simples.
+O gráfico foi feito utilizando Graphics e Graphics2D.
 
 O jogo tem três classes: a Main, que irá construir a janela do jogo, a Gameplay, onde o jogo será construido e irá funcionar, e a MapGenerator, que irá gerar os tijolos que irão aparecer no jogo.
 
