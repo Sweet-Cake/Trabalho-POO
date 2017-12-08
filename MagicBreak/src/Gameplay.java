@@ -14,6 +14,7 @@ import javax.swing.Timer;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener{
 	private boolean play = false;
+	private boolean win = false;
 	private int score = 0;
 	
 	private int totalBricks = 21;
@@ -63,6 +64,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		
 		if (totalBricks == 0){
 			play = false;
+			win = true;
 			ballXdir = 0;
 			ballYdir = 0;
 			g.setColor(Color.RED);
@@ -75,6 +77,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		
 		if(ballposY > 570){
 			play = false;
+			win = false;
 			ballXdir = 0;
 			ballYdir = 0;
 			g.setColor(Color.RED);
@@ -165,6 +168,17 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 		
 		if(e.getKeyCode() == KeyEvent.VK_ENTER){
 			if(!play){
+				if (win){
+					play = true;
+					ballposX = 120;
+					ballposY = 350;
+					ballXdir = -2;
+					ballYdir = -3;
+					playerX = 310;
+					score = 0;
+					totalBricks = 35;
+					map = new MapGenerator(5, 7);
+				}else {
 				play = true;
 				ballposX = 120;
 				ballposY = 350;
@@ -174,7 +188,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener{
 				score = 0;
 				totalBricks = 21;
 				map = new MapGenerator(3, 7);
-				
+				}
 				repaint();
 			}
 		}
